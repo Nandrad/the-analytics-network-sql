@@ -296,15 +296,65 @@ Ambas respuestas van a ser consideradas validas.
 ## Clase 3
 
 1. Mostrar nombre y codigo de producto, categoria y color para todos los productos de la marca Philips y Samsung, mostrando la leyenda "Unknown" cuando no hay un color disponible
+
+		select 
+			nombre,
+			codigo_producto,
+			categoria,
+			case when color is null then 'UNKNOWN'
+			else color
+			end as color
+		from 
+			stg.product_master
+		where
+			nombre like '%PHILIPS%'
+	
 2. Calcular las ventas brutas y los impuestos pagados por pais y provincia en la moneda correspondiente.
+		
+		select
+			sm.pais,
+			sm.provincia,
+			ls.moneda,
+			sum(venta),
+			sum(impuestos)
+		from 
+			stg.order_line_sale ls
+		left join 
+			stg.store_master sm on sm.codigo_tienda=ls.tienda
+		group by
+			sm.pais,
+			sm.provincia,
+			ls.moneda
+
 3. Calcular las ventas totales por subcategoria de producto para cada moneda ordenados por subcategoria y moneda.
+
+		select
+			pm.subcategoria,
+			ls.moneda,
+			sum(ls.venta)
+		from
+			stg.product_master pm
+		left join
+			stg.order_line_sale ls on pm.codigo_producto=ls.producto
+		group by pm.subcategoria,
+		 	ls.moneda
+			
 4. Calcular las unidades vendidas por subcategoria de producto y la concatenacion de pais, provincia; usar guion como separador y usarla para ordernar el resultado.
+		
+		
+
 5. Mostrar una vista donde sea vea el nombre de tienda y la cantidad de entradas de personas que hubo desde la fecha de apertura para el sistema "super_store". 
+
 6. Cual es el nivel de inventario promedio en cada mes a nivel de codigo de producto y tienda; mostrar el resultado con el nombre de la tienda.
+
 7. Calcular la cantidad de unidades vendidas por material. Para los productos que no tengan material usar 'Unknown', homogeneizar los textos si es necesario.
+
 8. Mostrar la tabla order_line_sales agregando una columna que represente el valor de venta bruta en cada linea convertido a dolares usando la tabla de tipo de cambio.
+
 9. Calcular cantidad de ventas totales de la empresa en dolares.
+
 10. Mostrar en la tabla de ventas el margen de venta por cada linea. Siendo margen = (venta - promociones) - costo expresado en dolares.
+
 11. Calcular la cantidad de items distintos de cada subsubcategoria que se llevan por numero de orden.
 
 
