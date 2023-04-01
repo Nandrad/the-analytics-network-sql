@@ -341,7 +341,18 @@ Ambas respuestas van a ser consideradas validas.
 			
 4. Calcular las unidades vendidas por subcategoria de producto y la concatenacion de pais, provincia; usar guion como separador y usarla para ordernar el resultado.
 		
-		
+		select 
+			pm.subcategoria,
+			SUM(ls.cantidad) as cantidad,
+		concat(sm.pais,'-',sm.provincia)as ubicacion
+		from 
+			stg.order_line_sale ls 
+		left join
+			stg.product_master pm  on ls.producto=pm.codigo_producto
+		left join 
+			stg.store_master sm on ls.tienda=sm.codigo_tienda
+		group by pm.subcategoria,cantidad,ubicacion
+		order by ubicacion 
 
 5. Mostrar una vista donde sea vea el nombre de tienda y la cantidad de entradas de personas que hubo desde la fecha de apertura para el sistema "super_store". 
 
